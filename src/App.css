@@ -129,13 +129,28 @@ button:disabled {
 
 .winner {
   font-size: 24px;
-  color: green;
+  color: rgb(11, 219, 11);
   animation: celebrate 2s infinite;
 }
 
-@keyframes celebrate {
+@keyframes celebrate{
   0%, 100% { transform: translateY(0) rotate(0deg); }
   25% { transform: translateY(-10px) rotate(5deg); }
   50% { transform: translateY(-20px) rotate(0deg); }
   75% { transform: translateY(-10px) rotate(-5deg); }
+}
+.dice{
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+
+
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(10deg); }
+  50% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
 }

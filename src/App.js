@@ -41,16 +41,26 @@ const App = () => {
   const [winner, setWinner] = useState(null);
   const [animatingSquare, setAnimatingSquare] = useState(null); // For snake/ladder animation
 
-  const rollDice = () => {
-    if (winner) return;
-    setIsRolling(true);
-    setTimeout(() => {
-      const roll = Math.floor(Math.random() * 6) + 1;
-      setDiceValue(roll);
+const rollDice = () => {
+  if (winner || isRolling) return;
+
+  setIsRolling(true);
+
+  let rolls = 0;
+  const maxRolls = 10; // how many times dice changes
+
+  const interval = setInterval(() => {
+    const randomValue = Math.floor(Math.random() * 6) + 1;
+    setDiceValue(randomValue);
+    rolls++;
+
+    if (rolls >= maxRolls) {
+      clearInterval(interval);
       setIsRolling(false);
-      movePlayer(roll);
-    }, 1500); // Longer roll for better animation
-  };
+      movePlayer(randomValue); // final value used
+    }
+  }, 100); // speed of animation (lower = faster)
+};
 
   const movePlayer = (steps) => {
     const player = players[currentPlayer];
@@ -124,13 +134,22 @@ const App = () => {
       <h1>Snake and Ladder Game</h1>
       <div className="board">{renderBoard()}</div>
       <div className="controls">
-        <button onClick={rollDice} disabled={isRolling || winner}>
-          {isRolling ? 'Rolling...' : 'Roll Dice'}
-        </button>
-        {diceValue && <div className="dice">Dice: {diceValue}</div>}
-        <div>Current Player: Player {players[currentPlayer].id} ({players[currentPlayer].color})</div>
-        {winner && <div className="winner">Player {winner} wins!</div>}
-      </div>
+  <button onClick={rollDice} disabled={isRolling || winner}>
+    {isRolling ? 'Rolling...' : 'Roll Dice'}
+  </button>
+
+  {diceValue && (
+    <div className={`dice ${isRolling ? 'rolling' : ''}`}>
+      🎲 {diceValue}
+    </div>
+  )}
+
+  <div>
+    Current Player: Player {players[currentPlayer].id} ({players[currentPlayer].color})
+  </div>
+
+  {winner && <div className="winner">Player {winner} wins!</div>}
+</div>
     </div>
   );
 };
